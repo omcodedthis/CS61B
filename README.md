@@ -1,4 +1,4 @@
-# CS61B
+# CS 61B - Data Structures
 In CS 61B, students are expected to gain facility with Java programming, become familiar with fundamental data structures and algorithms, and learn techniques for constructing programs of moderate size using Java.
 
 The first part will be devoted to an introduction to Java. Constructs and topics to be covered include the following:
