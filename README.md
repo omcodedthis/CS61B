@@ -8,6 +8,10 @@ The HW, Labs & Projects for each week are graded using an autograder on [Gradesc
 <img src="https://user-images.githubusercontent.com/119602009/233248793-9b985736-6e3d-4154-89fd-2404b3f29e11.png"> </img>
 </details>
 
+<details>
+<summary>View Week 2 Scores</summary>
+<img src="https://user-images.githubusercontent.com/119602009/234453214-dc66248a-4ac6-48a5-a0cf-88c19a92a884.png"> </img>
+</details>
 
 ## Getting Started
 
