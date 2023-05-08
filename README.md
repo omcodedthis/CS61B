@@ -13,6 +13,16 @@ The HW, Labs & Projects for each week are graded using an autograder on [Gradesc
 <img src="https://user-images.githubusercontent.com/119602009/234453214-dc66248a-4ac6-48a5-a0cf-88c19a92a884.png"> </img>
 </details>
 
+<details>
+<summary>View Week 3 Scores</summary>
+<img src="https://user-images.githubusercontent.com/119602009/236735913-deec4b6c-c2d0-4bc6-b3a6-b55bbb04a81d.png"> </img>
+</details>
+
+<details>
+<summary>View Week 4 Scores</summary>
+<img src="https://user-images.githubusercontent.com/119602009/236735919-d8cf5ae3-3700-43d3-b3b7-fa8663c8d8f7.png"> </img>
+</details>
+
 ## Getting Started
 
 * [CS61B's Spring 2021 Website.](https://sp21.datastructur.es/)
