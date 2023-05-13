@@ -29,6 +29,6 @@ The HW, Labs & Projects for each week are graded using an autograder on [Gradesc
 
 * Install [IntelliJ IDEA.](https://www.jetbrains.com/idea/)
 
-* Create an account on [Gradescope](https://www.gradescope.com/) using the course code "MB7ZPY".
+* Create an account on [Gradescope](https://www.gradescope.com/) using the Course Entry Code "MB7ZPY" & the School as "UC Berkeley".
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 <sub>*Disclaimer: If you are a current or a prospective student, accessing these projects in this repository is considered a ***violation of the Berkeley Honor Code.*** This repository has been briefly made public to be taken into consideration for applications, in compliance with the Berkeley Honor Code.*<sub/>
