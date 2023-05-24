@@ -2,7 +2,7 @@
 CS 61B covers fundamental dynamic data structures, including linear lists, queues, trees, and other linked structures; arrays strings, and hash tables. It also includes storage management, abstract data types and the elementary principles of software engineering. Additionally, algorithms for sorting and searching are covered. Java, the programming language, is taught during the first phase of the course.
 
 ## Weekly Scores
-The HW, Labs & Projects for each week are graded using an autograder on [Gradescope.](https://www.gradescope.com/) The autograder runs unit tests that check the correctness of the code. Do note that the Total Points score is the same as the Autograder Score but is unavailable for the public version of the course. The scores are categorised by the week that they were issued. Do note that for some weeks, HWs/Labs/Projects were not issued/not available to be graded by the provided autograder. As such, some weeks do not have any assignments. This section will be continually updated as I complete the course.
+The HW, Labs & Projects for each week are graded using an autograder on [Gradescope.](https://www.gradescope.com/) The autograder runs unit tests that check the correctness of the code. Do note that the Total Points score is the same as the Autograder Score but is unavailable for the public version of the course. The scores are categorised by the week that they were issued. For some weeks, HWs/Labs/Projects were not issued/not available to be graded by the provided autograder. As such, some weeks do not have any gradescope assignments/results. This section will be continually updated as I complete the course.
 
 Week 5 scores will be added soon. Currently working on Project 2, which was first issued in Week 5.
 
