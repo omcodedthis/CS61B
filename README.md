@@ -36,6 +36,10 @@ Week 5 scores will be added soon. Currently working on Project 2, which was firs
 <img src="https://github.com/omcodedthis/CS61B/assets/119602009/5eeaa436-fb49-4bc6-9289-7cf8eafdd0e8"> </img>
 </details>
 
+<details>
+<summary>View Week 8 Scores</summary>
+<img src="https://github.com/omcodedthis/CS61B/assets/119602009/c42e6def-0d2a-4256-bb8c-d7ec4710d3c7"> </img>
+</details>
 
 ## Getting Started
 
