@@ -1,5 +1,5 @@
 # CS 61B - Data Structures
-CS 61B covers fundamental dynamic data structures, including linear lists, queues, trees, graphs and other linked structures; arrays strings, and hash tables. It also includes storage management, abstract data types and the elementary principles of software engineering. Additionally, algorithms for sorting and searching are covered. Java, the programming language, is taught during the first phase of the course.
+CS 61B covers fundamental dynamic data structures, including linear lists, queues, trees, graphs and other linked structures; arrays strings, and hash tables. It also includes storage management, abstract data types and the elementary principles of software engineering. Additionally, algorithms for sorting and searching are covered. Java, the programming language, is taught during the first phase of the course. Additional information of CS 61B's curriculum can be found [here.](https://www2.eecs.berkeley.edu/Courses/CS61B/)
 
 ## Weekly Scores
 The HW, Labs & Projects for each week are graded using an autograder on [Gradescope.](https://www.gradescope.com/) The autograder runs unit tests that check the correctness of the code. Do note that the Total Points score is equivalent to the Autograder Score but is unavailable for the public version of the course. The scores are categorised by the week that they were issued. 
