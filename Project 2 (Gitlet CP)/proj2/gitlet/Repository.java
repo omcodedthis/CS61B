@@ -3,6 +3,8 @@ package gitlet;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import static gitlet.Utils.*;
 
 /** Represents a gitlet repository.
@@ -26,11 +28,10 @@ public class Repository {
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
 
-
     /* TODO: fill in the rest of this class. */
     public static void setUpPersistence() {
         if (GITLET_DIR.exists()) {
-            throw new GitletException("A Gitlet version-control system already exists in the current directory.");
+            message("A Gitlet version-control system already exists in the current directory.");
         }
         createFolders();
     }
@@ -59,7 +60,7 @@ public class Repository {
 
                 }
             } else {
-                throw new GitletException("No changes added to the commit.");
+                message("File does not exist.");
             }
         } catch (IOException e) {
             throw new GitletException("An IOException error occured when adding the file.");
@@ -77,6 +78,16 @@ public class Repository {
             File stageRmFolder = Utils.join(GITLET_DIR, "Stage", "Remove");
             File[] rmDirectory = stageRmFolder.listFiles();
 
+            if ((msg == null) || (msg.equals(""))) {
+                message("Please enter a commit message.");
+                return;
+            }
+
+            if ((addDirectory.length == 0) && (rmDirectory.length == 0)) {
+                message("No changes added to the commit.");
+                return;
+            }
+
             String headCommit = getHead();
             Commit newCommit = new Commit(msg, headCommit);
 
@@ -91,7 +102,7 @@ public class Repository {
                     addDirectory[i].delete();
                 }
             } else {
-                throw new GitletException("The directory for tracked files(add) returned null.");
+                throw new GitletException("The directory for tracked files (Add) returned null.");
             }
 
             if (rmDirectory != null) {
@@ -99,6 +110,7 @@ public class Repository {
                 for (int j = 0; j < totalFiles; j++) {
                     rmDirectory[j].delete();
                 }
+                clearDeleted();
             } else {
                 throw new GitletException("The directory for tracked files(add) returned null.");
             }
@@ -136,7 +148,7 @@ public class Repository {
                 }
             }
         }
-        throw new GitletException("No reason to remove the file.");
+        message("No reason to remove the file.");
     }
 
 
@@ -176,6 +188,50 @@ public class Repository {
         }
     }
 
+
+    /** Prints out the ids of all commits that have the given commit message,
+     * one per line. */
+    public static void find(String commitMessage) {
+        File commitsFolder = Utils.join(GITLET_DIR, "Commits");
+        File[] commitsDirectory = commitsFolder.listFiles();
+        boolean found = false;
+
+        for (int i = 0; i < commitsDirectory.length; i++) {
+            String currentFileName = commitsDirectory[i].getName();
+
+            if (isSHA1(currentFileName)) {
+                Commit currentCommit = readObject(commitsDirectory[i], Commit.class);
+                boolean outcome = checkCommitMessage(currentFileName, currentCommit, commitMessage);
+
+                if (outcome) {
+                    found = true;
+                }
+            }
+        }
+
+        if (!found) {
+            message("Found no commit with that message.");
+        }
+    }
+
+
+    /** Displays what branches currently exist, and marks the current branch
+     *  with a '*'. Also displays what files have been staged for addition or
+     *  removal. */
+    public static void status() {
+        printBranches();
+
+        printStaged();
+
+        printRemoved();
+
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        System.out.println();
+        System.out.println("=== Untracked Files ===");
+        System.out.println();
+    }
+
+
     /** Checks out files depending on what its arguments are with 3 possible
      * use cases. */
     public static void checkout(String[] args) {
@@ -189,7 +245,118 @@ public class Repository {
     }
 
 
-    /* HELPER METHODS */
+    /** Creates a new branch with the given name, and points it at the current
+     *  head commit. */
+    public static void branch(String branchName) {
+        try {
+            File commitsFolder = Utils.join(GITLET_DIR, "Commits");
+            File branch = Utils.join(commitsFolder, branchName);
+
+            if (branch.exists()) {
+                message("A branch with that name already exists.");
+            } else {
+                branch.createNewFile();
+                String hash = getHead();
+                writeContents(branch, hash);
+            }
+        } catch (IOException e) {
+            throw new GitletException("An error occured when creating this branch.");
+        }
+    }
+
+
+    /** Deletes the branch with the given name. This only means to delete
+     *  the pointer associated with the branch. */
+    public static void removeBranch(String branchName) {
+        File commitsFolder = Utils.join(GITLET_DIR, "Commits");
+        File branch = Utils.join(commitsFolder, branchName);
+
+        if (branch.exists()) {
+            checkAndRemoveBranch(branchName);
+        } else {
+            message("A branch with that name does not exist.");
+        }
+    }
+
+
+    /**  Checks out all the files tracked by the given commit. Removes
+     * tracked files that are not present in that commit. Also moves the
+     * current branch’s head to that commit node. */
+    public static void reset(String commitID) {
+        File commitFilePointer = Utils.join(GITLET_DIR, "Commits", commitID);
+
+        if (commitFilePointer.exists()) {
+            Commit currentCommit = readObject(commitFilePointer, Commit.class);
+            checkoutCommit(currentCommit);
+        } else {
+            message("No commit with that id exists.");
+        }
+    }
+
+
+
+    /* HELPER METHODS (In Alphabetical Order) */
+
+
+    /** Writes the Commit object to a file and updates HEAD & master. */
+    private static void addThisCommit(Commit newCommit) throws IOException {
+        File commits = Utils.join(GITLET_DIR, "Commits");
+
+        byte[] serialized = serialize(newCommit);
+        String hash = sha1(serialized);
+
+        File addCommit = Utils.join(commits, hash);
+        addCommit.createNewFile();
+        writeContents(addCommit, serialized);
+
+        File master = Utils.join(GITLET_DIR, "Commits", "master");
+        writeContents(master, hash);
+    }
+
+
+    /** Reads & adds the name of the deleted file to DELETED_FILES. */
+    private static void addToDeleted(String filename) {
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+
+        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        @SuppressWarnings("unchecked")
+        ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
+
+        deleted.add(filename);
+        writeObject(deletedFiles, deleted);
+    }
+
+
+    /** Checks that the specified branch exists & removes the branch if as long
+     * as it is not the HEAD. */
+    private static void checkAndRemoveBranch(String branchName) {
+        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
+        String headBranch = readContentsAsString(head);
+
+        if (headBranch.equals(branchName)) {
+            message("Cannot remove the current branch.");
+        } else {
+            writeToFile(head, "master");
+
+            File branch = Utils.join(GITLET_DIR, "Commits", branchName);
+            branch.delete();
+        }
+    }
+
+
+    /** Prints the Commit ID if commitMessage is the same as the currentCommit's
+     * message. */
+    private static boolean checkCommitMessage(String currentFileName, Commit currentCommit, String commitMessage) {
+        String cMsg = currentCommit.getMessage();
+
+        if (cMsg.equals(commitMessage)) {
+            System.out.println(currentFileName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /** Takes the version of the file as it exists in the head commit and
      * puts it in the working directory, overwriting the version of the file
@@ -203,6 +370,10 @@ public class Repository {
 
             for (int i = 0; i < currentCommit.references.length; i++) {
                 Reference currentRef = currentCommit.references[i];
+
+                if (currentRef == null) {
+                    break;
+                }
 
                 if ((currentRef.filename).equals(filename)) {
                     File filePointer = Utils.join(CWD, filename);
@@ -219,6 +390,7 @@ public class Repository {
      *  version of the file that’s already there if there is one. */
     private static void checkout2(String commitID, String filename) {
         File commitFilePointer = Utils.join(GITLET_DIR, "Commits", commitID);
+        boolean found = false;
 
         if (commitFilePointer.exists()) {
             Commit currentCommit = readObject(commitFilePointer, Commit.class);
@@ -226,12 +398,25 @@ public class Repository {
             for (int i = 0; i < currentCommit.references.length; i++) {
                 Reference currentRef = currentCommit.references[i];
 
+                if (currentRef == null) {
+                    break;
+                }
+
                 if ((currentRef.filename).equals(filename)) {
                     File filePointer = Utils.join(CWD, filename);
                     overwriteFile(filePointer, currentRef);
+                    found = true;
                     return;
                 }
             }
+
+            if (!found) {
+                message("File does not exist in that commit.");
+                return;
+            }
+
+        } else {
+            message("No commit with that id exists.");
         }
     }
 
@@ -243,30 +428,57 @@ public class Repository {
      * branch (HEAD). */
     private static void checkout3(String branch) {
         File branchFile = Utils.join(GITLET_DIR, "Commits", branch);
-        String commitID = null;
 
-        if (branchFile.exists()) {
-            commitID = readContentsAsString(branchFile);
+        if (!branchFile.exists()) {
+            message("No such branch exists.");
+            return;
         }
 
+        if (currentBranch(branch)) {
+            message("No need to checkout the current branch.");
+            return;
+        }
+
+        String commitID = readContentsAsString(branchFile);
         File commitFilePointer = Utils.join(GITLET_DIR, "Commits", commitID);
 
         if (commitFilePointer.exists()) {
             Commit currentCommit = readObject(commitFilePointer, Commit.class);
 
-            for (int i = 0; i < currentCommit.references.length; i++) {
-                Reference currentRef = currentCommit.references[i];
-
-                if (currentRef == null) {
-                    continue;
-                }
-                File filePointer = Utils.join(CWD, currentRef.filename);
-                overwriteFile(filePointer, currentRef);
-            }
+            checkoutCommit(currentCommit);
 
             File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
-            writeContents(head, commitID);
+            writeToFile(head, branch);
         }
+    }
+
+
+    /** Checks out the commit as per the 3rd Checkout scenario (branch) as given
+     * in the spec. */
+    private static void checkoutCommit(Commit currentCommit) {
+        for (int i = 0; i < currentCommit.references.length; i++) {
+            Reference currentRef = currentCommit.references[i];
+
+            if (currentRef == null) {
+                continue;
+            }
+
+            File filePointer = Utils.join(CWD, currentRef.filename);
+            overwriteFile(filePointer, currentRef);
+        }
+    }
+
+
+    /** Clears the ArrayList stored in Deleted_Files. */
+    private static void clearDeleted() {
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+
+        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        @SuppressWarnings("unchecked")
+        ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
+
+        deleted.clear();
+        writeObject(deletedFiles, deleted);
     }
 
 
@@ -301,13 +513,75 @@ public class Repository {
 
             File head = Utils.join(commitsFolder, "HEAD");
             head.createNewFile();
-            writeContents(head, shaHash);
+            writeToFile(head, "master");
 
-            File master = Utils.join(commitsFolder, "Master");
+            File master = Utils.join(commitsFolder, "master");
             master.createNewFile();
             writeContents(master, shaHash);
+
+            ArrayList<String> deleted = new ArrayList<>();
+            File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+            deletedFiles.createNewFile();
+            writeObject(deletedFiles, deleted);
         } catch (IOException e) {
             throw new GitletException("An IOException error occured when setting up the repository.");
+        }
+    }
+
+
+    /** Returns true if the branch is the current branch. */
+    private static boolean currentBranch(String branch) {
+        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
+        String headBranch = readContentsAsString(head);
+
+        if (headBranch.equals(branch)) {
+            message("No need to checkout the current branch.");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /** Returns the SHA-1 hash of the HEAD commit. */
+    private static String getHead() {
+        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
+        if (head.exists()) {
+            String headBranch = readContentsAsString(head);
+
+            File headBranchFile = Utils.join(GITLET_DIR, "Commits", headBranch);
+            String headHash = readContentsAsString(headBranchFile);
+
+            return headHash;
+        } else {
+            throw new GitletException("The HEAD file is missing.");
+        }
+    }
+
+
+    /** Returns true if the given string is a valid SHA-1 hash. */
+    private static boolean isSHA1(String hash) {
+        return hash.matches("^[a-fA-F0-9]{40}$");
+    }
+
+
+    /** Overwrites the specified file contents if it exists. */
+    private static void overwriteFile(File filePointer, Reference currentRef) {
+        try {
+            if (filePointer.exists()) {
+                File blob = Utils.join(GITLET_DIR, "Blobs", currentRef.blob);
+                String contents = readContentsAsString(blob);
+
+                writeToFile(filePointer, contents);
+            } else {
+                filePointer.createNewFile();
+                File blob = Utils.join(GITLET_DIR, "Blobs", currentRef.blob);
+                String contents = readContentsAsString(blob);
+
+                writeToFile(filePointer, contents);
+            }
+        } catch (IOException e) {
+            throw new GitletException("An IOException error occured during checkout.");
         }
     }
 
@@ -336,37 +610,6 @@ public class Repository {
     }
 
 
-    /** Returns the SHA-1 hash of the HEAD commit. */
-    private static String getHead() {
-        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
-        if (head.exists()) {
-            String headHash = readContentsAsString(head);
-            return headHash;
-        } else {
-            throw new GitletException("The HEAD file is missing.");
-        }
-    }
-
-
-    /** Writes the Commit object to a file and updates HEAD & Master. */
-    private static void addThisCommit(Commit newCommit) throws IOException {
-        File commits = Utils.join(GITLET_DIR, "Commits");
-
-        byte[] serialized = serialize(newCommit);
-        String hash = sha1(serialized);
-
-        File addCommit = Utils.join(commits, hash);
-        addCommit.createNewFile();
-        writeContents(addCommit, serialized);
-
-        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
-        writeContents(head, hash);
-
-        File master = Utils.join(GITLET_DIR, "Commits", "Master");
-        writeContents(master, hash);
-    }
-
-
     /** Reads the details from a Commit object & prints it to the terminal. */
     private static void printCommitDetails(Commit currentCommit, String commitHash) {
         System.out.println("===");
@@ -377,24 +620,74 @@ public class Repository {
     }
 
 
-    /** Overwrites the specified file contents if it exists. */
-    private static void overwriteFile(File filePointer, Reference currentRef) {
-        try {
-            if (filePointer.exists()) {
-                File blob = Utils.join(GITLET_DIR, "Blobs", currentRef.blob);
-                String contents = readContentsAsString(blob);
+    /** Prints the Branches. The current branch is marked with a '*'. */
+    private static void printBranches() {
+        System.out.println("=== Branches ===");
 
-                writeToFile(filePointer, contents);
-            } else {
-                filePointer.createNewFile();
-                File blob = Utils.join(GITLET_DIR, "Blobs", currentRef.blob);
-                String contents = readContentsAsString(blob);
+        File commitsDirectory = Utils.join(GITLET_DIR, "Commits");
+        File head = Utils.join(commitsDirectory, "HEAD");
+        String currentBranch = readContentsAsString(head);
 
-                writeToFile(filePointer, contents);
+        System.out.println("*" + currentBranch);
+
+        File[] commitsDirList = commitsDirectory.listFiles();
+
+        for (File x: commitsDirList) {
+            String filename = x.getName();
+
+            if ((!isSHA1(filename)) && (!(filename).equals(currentBranch)) && (!(filename).equals("HEAD"))) {
+                System.out.println(filename);
             }
-        } catch (IOException e) {
-            throw new GitletException("An IOException error occured during checkout.");
         }
+
+        System.out.println();
+    }
+
+
+    /** Prints the Removed Files. */
+    private static void printRemoved() {
+        System.out.println("=== Removed Files ===");
+
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+
+        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        @SuppressWarnings("unchecked")
+        ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
+
+        for (String x: deleted) {
+            System.out.println(x);
+        }
+
+        System.out.println();
+    }
+
+
+    /** Prints the Staged Files. */
+    private static void printStaged() {
+        System.out.println("=== Staged Files ===");
+
+        File stageAddFolder = Utils.join(GITLET_DIR, "Stage", "Add");
+        File[] addDirectory = stageAddFolder.listFiles();
+        File stageRmFolder = Utils.join(GITLET_DIR, "Stage", "Remove");
+        File[] rmDirectory = stageRmFolder.listFiles();
+
+        if (addDirectory != null) {
+            int totalFiles = addDirectory.length;
+            for (int i = 0; i < totalFiles; i++) {
+                String filename = addDirectory[i].getName();
+                System.out.println(filename);
+            }
+        }
+
+        if (rmDirectory != null) {
+            int totalFiles = rmDirectory.length;
+            for (int j = 0; j < totalFiles; j++) {
+                String filename = rmDirectory[j].getName();
+                System.out.println(filename);
+            }
+        }
+
+        System.out.println();
     }
 
 
@@ -408,6 +701,8 @@ public class Repository {
             writeToFile(stageForRm, blobID);
 
             File userFile = Utils.join(CWD, filename);
+
+            addToDeleted(filename);
             if (userFile.exists()) {
                 userFile.delete();
             }
@@ -417,10 +712,6 @@ public class Repository {
     }
 
 
-    /** Returns true if the given string is a valid SHA-1 hash. */
-    private static boolean isSHA1(String hash) {
-        return hash.matches("^[a-fA-F0-9]{40}$");
-    }
     /** The writeContents()/writeObject() provided by CS61B staff in Utils
      *  did not work as intended as it adds random characters to files
      *  when writing content to a file (possibly because it was deprecated).
