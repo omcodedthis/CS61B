@@ -3,8 +3,9 @@ package gitlet;
 import java.io.Serializable;
 import java.util.Date;
 
-/** Represents a gitlet commit object.
+/** Represents a gitlet Commit object.
  *  Commit is class that has 5 instance variables.
+ *
  *  dateAndTime: Stores the date & time of the commit.
  *  message: Stores the message of commit.
  *  references: Stores the all the references to the files part of the commit.
@@ -19,10 +20,10 @@ public class Commit implements Serializable {
     private String message;
 
     /** The references to the file contents for each commit, stored in an ArrayList. */
-    public Reference[] references = new Reference[100];
+    protected Reference[] references = new Reference[100];
 
     /** The reference to this Commit's immediate parent. */
-    public String myParent;
+    protected String myParent;
 
 
     /** Constructor for the Commit object. */
@@ -39,7 +40,7 @@ public class Commit implements Serializable {
     }
 
 
-    /** Returns the message of the commit as a string. */
+    /** Returns the DateAndTime of the commit as a string. */
     public String getDateAndTime() {
         return dateAndTime;
     }
@@ -73,7 +74,7 @@ public class Commit implements Serializable {
             char[] dateHolder = date.toCharArray();
 
             for (int i = 24; i < 28; i++) {
-                dateHolder[i-24] = dateActual[i];
+                dateHolder[i - 24] = dateActual[i];
             }
 
             timestamp = new String(formatter);

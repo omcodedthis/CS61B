@@ -9,8 +9,8 @@ import java.io.Serializable;
  *  @author om
  */
 public class Reference implements Serializable {
-    public String filename;
-    public String blob;
+    protected String filename;
+    protected String blob;
 
 
     /** Constructor for the Reference object. */
@@ -18,5 +18,4 @@ public class Reference implements Serializable {
         filename = fn;
         blob = blb;
     }
-
 }

@@ -4,31 +4,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static gitlet.Utils.*;
 
-/** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
+/** Represents a gitlet repository, handling every command called by Main.
+ *  The descriptions for each method is explained in greater depth below
+ *  (above the respective method singatures).
+ *
+ *  It has 2 instance variables.
+ *
+ *  CWD: The user's current working directory.
+ *  GITLET_DIR: The directory of the .gitlet file.
  *
  *  @author om
  */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
-
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
 
-    /* TODO: fill in the rest of this class. */
     public static void setUpPersistence() {
         if (GITLET_DIR.exists()) {
             message("A Gitlet version-control system already exists in the current directory.");
@@ -38,11 +33,11 @@ public class Repository {
 
 
     /** Adds a copy of the file as it currently exists to the staging area. */
-    public static void add(String fn) {
+    public static void add(String filename) {
         try {
-            File userFile = Utils.join(CWD, fn);
+            File userFile = Utils.join(CWD, filename);
             if (userFile.exists()) {
-                File stageVer = Utils.join(GITLET_DIR, "Stage", "Add", fn);
+                File stageVer = Utils.join(GITLET_DIR, "Stage", "Add", filename);
                 File blobDirectory = Utils.join(GITLET_DIR, "Blobs");
 
                 if (stageVer.exists()) {
@@ -99,6 +94,7 @@ public class Repository {
 
                     Reference reference = new Reference(filename, blob);
                     newCommit.references[i] = reference;
+
                     addDirectory[i].delete();
                 }
             } else {
@@ -122,7 +118,7 @@ public class Repository {
     }
 
 
-    /**  Unstages the file if it is currently staged for addition. If the file
+    /** Unstages the file if it is currently staged for addition. If the file
      *  is tracked in the current commit, it is staged for removal and removed
      *  from the working directory if the user has not already done so. */
     public static void remove(String filename) {
@@ -216,8 +212,8 @@ public class Repository {
 
 
     /** Displays what branches currently exist, and marks the current branch
-     *  with a '*'. Also displays what files have been staged for addition or
-     *  removal. */
+     * with a '*'. Also displays what files have been staged for addition or
+     * removal. */
     public static void status() {
         printBranches();
 
@@ -233,12 +229,25 @@ public class Repository {
 
 
     /** Checks out files depending on what its arguments are with 3 possible
-     * use cases. */
+     * use cases. Also ensures that for checkout1 & checkout2, the argument
+     * of index 1 is "--" as per the spec. */
     public static void checkout(String[] args) {
         if (args.length == 3) {
-            checkout1(args[2]);
+            if (args[1].equals("--")) {
+                checkout1(args[2]);
+                return;
+            }
+            message("Incorrect operands.");
+            System.exit(0);
+
         } else if (args.length == 4) {
-            checkout2(args[1], args[3]);
+            if (args[2].equals("--")) {
+                checkout2(args[1], args[3]);
+                return;
+            }
+            message("Incorrect operands.");
+            System.exit(0);
+
         } else if (args.length == 2) {
             checkout3(args[1]);
         }
@@ -246,7 +255,7 @@ public class Repository {
 
 
     /** Creates a new branch with the given name, and points it at the current
-     *  head commit. */
+     * head commit. */
     public static void branch(String branchName) {
         try {
             File commitsFolder = Utils.join(GITLET_DIR, "Commits");
@@ -266,7 +275,7 @@ public class Repository {
 
 
     /** Deletes the branch with the given name. This only means to delete
-     *  the pointer associated with the branch. */
+     * the pointer associated with the branch. */
     public static void removeBranch(String branchName) {
         File commitsFolder = Utils.join(GITLET_DIR, "Commits");
         File branch = Utils.join(commitsFolder, branchName);
@@ -283,10 +292,9 @@ public class Repository {
      * tracked files that are not present in that commit. Also moves the
      * current branch’s head to that commit node. */
     public static void reset(String commitID) {
-        File commitFilePointer = Utils.join(GITLET_DIR, "Commits", commitID);
+        Commit currentCommit = findCommit(commitID);
 
-        if (commitFilePointer.exists()) {
-            Commit currentCommit = readObject(commitFilePointer, Commit.class);
+        if (currentCommit != null) {
             checkoutCommit(currentCommit);
         } else {
             message("No commit with that id exists.");
@@ -314,11 +322,11 @@ public class Repository {
     }
 
 
-    /** Reads & adds the name of the deleted file to DELETED_FILES. */
+    /** Reads & adds the name of the deleted file to deleted_files. */
     private static void addToDeleted(String filename) {
-        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "deleted_files");
 
-        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        // prevents an "[unchecked] unchecked conversion" warning from occurring during compilation.
         @SuppressWarnings("unchecked")
         ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
 
@@ -368,7 +376,7 @@ public class Repository {
         if (commitFilePointer.exists()) {
             Commit currentCommit = readObject(commitFilePointer, Commit.class);
 
-            for (int i = 0; i < currentCommit.references.length; i++) {
+            for (int i = 0; i <  currentCommit.references.length; i++) {
                 Reference currentRef = currentCommit.references[i];
 
                 if (currentRef == null) {
@@ -386,15 +394,13 @@ public class Repository {
 
 
     /** Takes the version of the file as it exists in the commit with the
-     *  given id, and puts it in the working directory, overwriting the
-     *  version of the file that’s already there if there is one. */
+     * given id, and puts it in the working directory, overwriting the
+     * version of the file that’s already there if there is one. */
     private static void checkout2(String commitID, String filename) {
-        File commitFilePointer = Utils.join(GITLET_DIR, "Commits", commitID);
+        Commit currentCommit = findCommit(commitID);
         boolean found = false;
 
-        if (commitFilePointer.exists()) {
-            Commit currentCommit = readObject(commitFilePointer, Commit.class);
-
+        if (currentCommit != null) {
             for (int i = 0; i < currentCommit.references.length; i++) {
                 Reference currentRef = currentCommit.references[i];
 
@@ -434,7 +440,7 @@ public class Repository {
             return;
         }
 
-        if (currentBranch(branch)) {
+        if (isCurrentBranch(branch)) {
             message("No need to checkout the current branch.");
             return;
         }
@@ -456,6 +462,7 @@ public class Repository {
     /** Checks out the commit as per the 3rd Checkout scenario (branch) as given
      * in the spec. */
     private static void checkoutCommit(Commit currentCommit) {
+
         for (int i = 0; i < currentCommit.references.length; i++) {
             Reference currentRef = currentCommit.references[i];
 
@@ -469,11 +476,11 @@ public class Repository {
     }
 
 
-    /** Clears the ArrayList stored in Deleted_Files. */
+    /** Clears the ArrayList stored in deleted_files. */
     private static void clearDeleted() {
-        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "deleted_files");
 
-        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        // prevents an "[unchecked] unchecked conversion" warning from occurring during compilation.
         @SuppressWarnings("unchecked")
         ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
 
@@ -520,7 +527,7 @@ public class Repository {
             writeContents(master, shaHash);
 
             ArrayList<String> deleted = new ArrayList<>();
-            File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+            File deletedFiles = Utils.join(GITLET_DIR, "Stage", "deleted_files");
             deletedFiles.createNewFile();
             writeObject(deletedFiles, deleted);
         } catch (IOException e) {
@@ -529,17 +536,23 @@ public class Repository {
     }
 
 
-    /** Returns true if the branch is the current branch. */
-    private static boolean currentBranch(String branch) {
-        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
-        String headBranch = readContentsAsString(head);
+    /** Finds & returns the Commit that matches all the characters in the
+     * given Commit ID. Returns null if the given Commit ID cannot be
+     * found. */
+    private static Commit findCommit(String commitID) {
+        File commitsFolder = Utils.join(GITLET_DIR, "Commits");
+        File[] commits = commitsFolder.listFiles();
 
-        if (headBranch.equals(branch)) {
-            message("No need to checkout the current branch.");
-            return true;
-        } else {
-            return false;
+        for (File x: commits) {
+            String currentCommitID = x.getName();
+
+            if (currentCommitID.contains(commitID)) {
+                File commitFile =  Utils.join(commitsFolder, currentCommitID);
+                Commit currentCommit = readObject(commitFile, Commit.class);
+                return currentCommit;
+            }
         }
+        return null;
     }
 
 
@@ -556,6 +569,15 @@ public class Repository {
         } else {
             throw new GitletException("The HEAD file is missing.");
         }
+    }
+
+
+    /** Returns true if the branch is the current branch. */
+    private static boolean isCurrentBranch(String branch) {
+        File head = Utils.join(GITLET_DIR, "Commits", "HEAD");
+        String headBranch = readContentsAsString(head);
+
+        return headBranch.equals(branch);
     }
 
 
@@ -648,9 +670,9 @@ public class Repository {
     private static void printRemoved() {
         System.out.println("=== Removed Files ===");
 
-        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "Deleted_Files");
+        File deletedFiles = Utils.join(GITLET_DIR, "Stage", "deleted_files");
 
-        // prevents an "[unchecked] unchecked conversion" warning from occuring during compilation.
+        // prevents an "[unchecked] unchecked conversion" warning from occurring during compilation.
         @SuppressWarnings("unchecked")
         ArrayList<String> deleted = readObject(deletedFiles, ArrayList.class);
 
@@ -668,21 +690,11 @@ public class Repository {
 
         File stageAddFolder = Utils.join(GITLET_DIR, "Stage", "Add");
         File[] addDirectory = stageAddFolder.listFiles();
-        File stageRmFolder = Utils.join(GITLET_DIR, "Stage", "Remove");
-        File[] rmDirectory = stageRmFolder.listFiles();
 
         if (addDirectory != null) {
             int totalFiles = addDirectory.length;
             for (int i = 0; i < totalFiles; i++) {
                 String filename = addDirectory[i].getName();
-                System.out.println(filename);
-            }
-        }
-
-        if (rmDirectory != null) {
-            int totalFiles = rmDirectory.length;
-            for (int j = 0; j < totalFiles; j++) {
-                String filename = rmDirectory[j].getName();
                 System.out.println(filename);
             }
         }
@@ -713,10 +725,10 @@ public class Repository {
 
 
     /** The writeContents()/writeObject() provided by CS61B staff in Utils
-     *  did not work as intended as it adds random characters to files
-     *  when writing content to a file (possibly because it was deprecated).
-     *  Hence, this a working helper method I came up with which has the same
-     *  functionality but avoids adding these random characters to the file. */
+     * did not work as intended as it adds random characters to files
+     * when writing content to a file (possibly because it was deprecated).
+     * Hence, this a working helper method I came up with which has the same
+     * functionality but avoids adding these random characters to the file. */
     private static void writeToFile(File filePointer, String contents) {
         try {
             FileWriter writer = new FileWriter(filePointer);

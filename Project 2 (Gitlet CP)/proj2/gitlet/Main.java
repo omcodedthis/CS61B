@@ -1,7 +1,5 @@
 package gitlet;
 
-import gitlet.*;
-
 import java.io.File;
 
 import static gitlet.Utils.join;
@@ -26,13 +24,11 @@ public class Main {
                 break;
 
             case "add":
-                // TODO: handle the `add [filename]` command
                 validateNumArgs(args, 2);
                 gitletExists();
                 Repository.add(args[1]);
                 break;
-
-            // TODO: FILL THE REST IN
+                
             case "commit":
                 validateNumArgs(args, 2);
                 gitletExists();
@@ -94,6 +90,8 @@ public class Main {
                 break;
 
             case "merge":
+                validateNumArgs(args, 2);
+                gitletExists();
                 break;
 
             default:
@@ -107,18 +105,18 @@ public class Main {
     public static void checkNotEmpty(String[] args) {
         if (args.length <= 0) {
             Utils.message("Please enter a command.");
-            System.exit(1);
+            System.exit(0);
         }
     }
 
 
     /** Checks the that the number of arguments entered is
-     * valid (2 arguments, git + command), throws an exception
+     * valid (n arguments, git + command), throws an exception
      * if it is not. */
     public static void validateNumArgs(String[] args, int n) {
         if (args.length > n) {
             Utils.message("Incorrect operands.");
-            System.exit(1);
+            System.exit(0);
         }
     }
 
@@ -131,7 +129,7 @@ public class Main {
             return;
         } else {
             message("Not in an initialized Gitlet directory.");
-            System.exit(1);
+            System.exit(0);
         }
     }
 }
