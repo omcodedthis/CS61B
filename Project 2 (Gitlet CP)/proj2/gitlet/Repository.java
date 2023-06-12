@@ -8,7 +8,7 @@ import static gitlet.Utils.*;
 
 /** Represents a gitlet repository, handling every command called by Main.
  *  The descriptions for each method is explained in greater depth below
- *  (above the respective method singatures).
+ *  (above the respective method signatures).
  *
  *  It has 2 instance variables.
  *
