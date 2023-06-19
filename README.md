@@ -46,6 +46,37 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 <img src="https://github.com/omcodedthis/CS61B/assets/119602009/c42e6def-0d2a-4256-bb8c-d7ec4710d3c7"> </img>
 </details>
 
+<br>
+
+### Labs Total Score
+The Labs mostly tested the understanding of the various Data Structures concepts through implementation.
+```
+Overall
+416 / 416 Points = 100%
+```
+
+### Projects Total Score
+In addition to the HWs and labs, there are 4 programming projects. In these projects an entire system is built. Each project has a specific theme:
+
+* Project 0 (2048): Introduction to Java  ***- 640 Points***
+* <br>
+* Project 1 (Deques): Basic Design, Testing, and Code Review  ***- 640 Points***
+* Project 2 (Gitlet): Design, Large Scale Implementation  ***- 1504 Points (non EC)***
+* Project 3 (BYOW): Large Scale Design  ***- 1600 Points***
+
+<sub> Note that for Project 2, there were some issues with the provided utility functions, possibly due to deprecation. I wrote my own wherever I could to maximise functionality. </sub>
+```
+Individual Project Percentages:
+Project 0 ≈ 87%
+Project 1 = 100%
+Project 2 ≈ 70%
+Project 3 - TBA
+
+Overall
+2,310.519 / 2848 Points ≈ 81% (as of 19/06/2023, just finished Project 2 & currently working on Project 3).
+```
+
+
 ## Getting Started
 
 * [CS61B's Spring 2021 Website.](https://sp21.datastructur.es/)
