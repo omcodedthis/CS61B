@@ -178,6 +178,20 @@ public class HelperMethods {
     }
 
 
+    /** Checks for failure cases before proceeding with the reset. */
+    protected static void checkForResetFailures(String commitID) {
+        File master = Utils.join(GITLET_DIR, "Commits", "master");
+        String hash = readContentsAsString(master);
+
+        if (commitID.equals(hash)) {
+            message("There is an untracked file in the way; delete it, "
+                + "or add and commit it first.");
+
+            System.exit(0);
+        }
+    }
+
+
     /** Takes the version of the file as it exists in the head commit and
      * puts it in the working directory, overwriting the version of the file
      * that’s already there if there is one. */
