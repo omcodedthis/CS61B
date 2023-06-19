@@ -46,9 +46,10 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 <img src="https://github.com/omcodedthis/CS61B/assets/119602009/c42e6def-0d2a-4256-bb8c-d7ec4710d3c7"> </img>
 </details>
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Labs Total Score
-The Labs mostly tested the understanding of the various Data Structures concepts through implementation.
+The Labs mostly tested the understanding of the various concepts taught through implementation.
 ```
 Overall
 416 / 416 Points = 100%
@@ -58,7 +59,6 @@ Overall
 In addition to the HWs and labs, there are 4 programming projects. In these projects an entire system is built. Each project has a specific theme:
 
 * Project 0 (2048): Introduction to Java  ***- 640 Points***
-* <br>
 * Project 1 (Deques): Basic Design, Testing, and Code Review  ***- 640 Points***
 * Project 2 (Gitlet): Design, Large Scale Implementation  ***- 1504 Points (non EC)***
 * Project 3 (BYOW): Large Scale Design  ***- 1600 Points***
