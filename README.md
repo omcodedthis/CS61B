@@ -28,7 +28,7 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 
 <details>
 <summary>View Week 5 Scores</summary>
-<img src="https://github.com/omcodedthis/CS61B/assets/119602009/837e5769-9a8d-4fd8-88b2-2f28f32c66f1"> </img>
+<img src="https://github.com/omcodedthis/CS61B/assets/119602009/2cb43393-8c26-4664-b359-fb8d42bc6dea"> </img>
 </details>
 
 <details>
@@ -60,7 +60,7 @@ In addition to the HWs and labs, there are 4 programming projects. In these proj
 
 * Project 0 (2048): Introduction to Java  ***- 640 Points***
 * Project 1 (Deques): Basic Design, Testing, and Code Review  ***- 640 Points***
-* Project 2 (Gitlet): Design, Large Scale Implementation  ***- 1504 Points (non EC)***
+* Project 2 (Gitlet): Design, Large Scale Implementation  ***- 1600 Points***
 * Project 3 (BYOW): Large Scale Design  ***- 1600 Points***
 
 <sub> Note that for Project 2, there were some issues with the provided utility functions, possibly due to deprecation. I wrote my own wherever I could to maximise functionality. </sub>
@@ -72,7 +72,7 @@ Project 2 ≈ 70%
 Project 3 - TBA
 
 Overall
-2,310.519 / 2848 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2).
+2321.778 / 2880 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2).
 ```
 
 
