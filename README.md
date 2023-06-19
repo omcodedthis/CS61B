@@ -46,7 +46,6 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 <img src="https://github.com/omcodedthis/CS61B/assets/119602009/c42e6def-0d2a-4256-bb8c-d7ec4710d3c7"> </img>
 </details>
 
-<br>
 
 ### Labs Total Score
 The Labs mostly tested the understanding of the various Data Structures concepts through implementation.
@@ -73,7 +72,7 @@ Project 2 ≈ 70%
 Project 3 - TBA
 
 Overall
-2,310.519 / 2848 Points ≈ 81% (as of 19/06/2023, just finished Project 2 & currently working on Project 3).
+2,310.519 / 2848 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2).
 ```
 
 
