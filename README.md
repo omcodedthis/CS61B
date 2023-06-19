@@ -4,7 +4,7 @@ CS 61B covers fundamental dynamic data structures, including linear lists, queue
 ## Weekly Scores
 The HW, Labs & Projects for each week are graded using an autograder on [Gradescope.](https://www.gradescope.com/) The autograder runs unit tests that check the correctness of the code. Do note that the Total Points score is equivalent to the Autograder Score but is unavailable for the public version of the course. The scores are categorised by the week that they were issued. 
 
-For some weeks, the HWs/Labs/Projects were not issued/not available to be graded by the autograder. As such, some weeks do not have any gradescope assignments/results. This section will be continually updated as I complete the course. Currently working on Project 2, which was first issued in Week 5.
+For some weeks, the HWs/Labs/Projects were not issued/not available to be graded by the autograder. As such, some weeks do not have any gradescope assignments/results. This section will be continually updated as I complete the course.
 
 <details>
 <summary>View Week 1 Scores</summary>
@@ -28,7 +28,7 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 
 <details>
 <summary>View Week 5 Scores</summary>
-<img src="https://github.com/omcodedthis/CS61B/assets/119602009/1ca24f2d-11b0-4828-a3f8-3875a97bb1d4"> </img>
+<img src="https://github.com/omcodedthis/CS61B/assets/119602009/837e5769-9a8d-4fd8-88b2-2f28f32c66f1"> </img>
 </details>
 
 <details>
