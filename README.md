@@ -77,7 +77,7 @@ Project 2 ≈ 70%
 Project 3 - TBA
 
 Overall
-2321.778 / 2880 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2).
+2321.778 / 2880 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2, previously was 93%).
 ```
 
 
