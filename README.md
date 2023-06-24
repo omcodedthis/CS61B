@@ -3,7 +3,7 @@ CS 61B covers fundamental dynamic data structures, including linear lists, queue
 
 
 ## Current Progress
-![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/68d278cb-4d32-40bc-be52-b91aa25be79d)
+![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/dfc9d244-a26f-4796-b22c-c6b15b54e488)
 
 
 ## Weekly Scores
@@ -51,8 +51,15 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 <img src="https://github.com/omcodedthis/CS61B/assets/119602009/c42e6def-0d2a-4256-bb8c-d7ec4710d3c7"> </img>
 </details>
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<details>
+<summary>View Week 12 Scores</summary>
+<img src="https://github.com/omcodedthis/CS61B/assets/119602009/8dea878a-5188-42f7-84f5-32227ee180d5"> </img>
+</details>
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<details>
+<summary>View Score Breakdown</summary>
+  
 ### Labs Total Score
 The Labs mostly tested the understanding of the various concepts taught through implementation.
 ```
@@ -79,6 +86,8 @@ Project 3 - TBA
 Overall
 2321.778 / 2880 Points ≈ 81% (correct as of 19/06/2023, just finished Project 2, previously was 93%).
 ```
+
+</details>
 
 
 ## Getting Started
