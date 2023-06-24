@@ -58,7 +58,7 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 <details>
-<summary>View Score Breakdown</summary>
+<summary>View Total Score Breakdown</summary>
   
 ### Labs Total Score
 The Labs mostly tested the understanding of the various concepts taught through implementation.
