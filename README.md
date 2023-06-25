@@ -64,7 +64,7 @@ For some weeks, the HWs/Labs/Projects were not issued/not available to be graded
 The Labs mostly tested the understanding of the various concepts taught through implementation.
 ```
 Overall
-416 / 416 Points = 100%
+480 / 480 Points = 100%
 ```
 
 ### Projects Total Score
