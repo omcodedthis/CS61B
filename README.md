@@ -3,7 +3,7 @@ CS 61B covers fundamental dynamic data structures, including linear lists, queue
 
 
 ## Current Progress
-![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/dfc9d244-a26f-4796-b22c-c6b15b54e488)
+![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/412bb4e9-1bd6-4c88-b782-e4882e67c05d)
 
 
 ## Weekly Scores
