@@ -3,7 +3,7 @@ CS 61B covers fundamental dynamic data structures, including linear lists, queue
 
 
 ## Current Progress
-![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/7ded612a-de4a-4d7a-b945-04261ed25892)
+![cs61bcurrentprog](https://github.com/omcodedthis/CS61B/assets/119602009/36d1ed6a-c8a0-4c71-97bb-7d9c96839c0a)
 
 
 ## Weekly Scores
@@ -75,7 +75,7 @@ In addition to the HWs and labs, there are 4 programming projects. In these proj
 * Project 2 (Gitlet): Design, Large Scale Implementation  ***- 1600 Points***
 * Project 3 (BYOW): Large Scale Design  ***- 1600 Points***
 
-<sub> Note that for Project 2, there were some issues with the provided utility functions, possibly due to deprecation. I wrote my own wherever I could to maximise functionality. </sub>
+<sub> Note that for Project 2, there were some issues with the provided utility functions, possibly due to deprecation. I wrote my own wherever I could to maximise functionality. The provided unit tests did not work as well. </sub>
 ```
 Individual Project Percentages:
 Project 0 ≈ 87%
