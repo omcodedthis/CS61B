@@ -11,6 +11,8 @@ The HW, Labs & Projects for each week are graded using an autograder on [Gradesc
 
 For some weeks, the HWs/Labs/Projects were not issued/not available to be graded by the autograder. As such, some weeks do not have any gradescope results. This section will be continually updated as I complete the course.
 
+Currently working on Project 3: CS61BYoW.
+
 <details>
 <summary>View Week 1 Scores</summary>
 <img src="https://user-images.githubusercontent.com/119602009/233248793-9b985736-6e3d-4154-89fd-2404b3f29e11.png"> </img>
